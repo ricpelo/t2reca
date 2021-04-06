@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Reservas;
 use Yii;
 use app\models\Vuelos;
 use app\models\VuelosSearch;
@@ -46,7 +47,19 @@ class VuelosController extends Controller
 
     public function actionReservar($id)
     {
-        return $id;
+        $vuelo = $this->findModel($id);
+        $reservas = new Reservas();
+        $reservas->vuelo_id = $id;
+        $reservas->usuario_id = Yii::$app->user->id;
+
+        if ($reservas->load(Yii::$app->request->post()) && $reservas->save()) {
+
+        }
+
+        return $this->render('reservar', [
+            'vuelo' => $vuelo,
+            'reservas' => $reservas,
+        ]);
     }
 
     /**

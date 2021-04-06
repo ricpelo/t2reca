@@ -128,4 +128,28 @@ class Vuelos extends \yii\db\ActiveRecord
     {
         return $this->plazas - $this->getReservas()->count();
     }
+
+    public function asientosLibres()
+    {
+        $ocupados = $this->getReservas()->select('asiento')->column();
+        $ret = array_diff(range(1, $this->plazas), $ocupados);
+        return array_combine($ret, $ret);
+    }
+
+    /*
+    public function asientosLibres()
+    {
+        $ocupados = $this->getReservas()->select('asiento')->column();
+        $ret = [];
+
+        for ($i = 1; $i <= $this->plazas; $i++) {
+            if (!in_array($i, $ocupados)) {
+                $ret[$i] = $i;
+            }
+        }
+
+        return $ret;
+    }
+    */
+
 }
