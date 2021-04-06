@@ -52,14 +52,13 @@ $config = [
         'formatter' => [
             'timeZone' => 'Europe/Madrid',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'vuelos/reservar/<id:\d+>' => 'vuelos/reservar',
             ],
         ],
-        */
     ],
     'container' => [
         'definitions' => [

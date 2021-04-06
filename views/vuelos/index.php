@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Vuelos;
 use yii\bootstrap4\Html;
 use yii\grid\GridView;
 
@@ -30,20 +31,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'llegada:datetime',
             'plazas',
             'precio:currency',
+            'plazasLibres',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{reservar} {anular}',
                 'buttons' => [
-                    'reservar' => function ($url, $model, $key) {
-                        if (Yii::$app->user->isGuest) {
-                            // se pinta el botón
-                        } else {
-                            // if (no tiene reservas) {
-                                // se pinta el botón
-                            // }
+                    'reservar' => function ($url, Vuelos $model, $key) {
+                        if (!$model->tieneReserva()) {
+                            return Html::a('Reservar', [
+                                'vuelos/reservar',
+                                'id' => $model->id
+                            ], ['class' => 'btn-sm btn-info']);
                         }
                     },
-                    'anular' => function ($url, $model, $key) {
+                    'anular' => function ($url, Vuelos $model, $key) {
+                        if ($model->tieneReserva()) {
+                            return Html::a('Anular', [
+                                'vuelos/anular',
+                                'id' => $model->id
+                            ], ['class' => 'btn-sm btn-info']);
+                        }
                     }
                 ],
             ],
