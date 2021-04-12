@@ -24,8 +24,19 @@ $this->params['breadcrumbs'][] = $this->title;
     ],
 ]) ?>
 
+<?php if ($reservas->hasErrors()): ?>
+    <div>
+        <p>Se han producido los siguientes errores:</p>
+    </div>
+    <ul style="color:red">
+        <?php foreach ($reservas->getErrors() as $error): ?>
+            <li><?= $error[0] ?></li>
+        <?php endforeach ?>
+    </ul>
+<?php endif ?>
+
 <?php $form = ActiveForm::begin() ?>
-    <?= $form->field($reservasForm, 'asiento')->dropdownList($vuelo->asientosLibres()) ?>
+    <?= $form->field($reservas, 'asiento')->dropdownList($vuelo->asientosLibres()) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Reservar', ['class' => 'btn btn-primary']) ?>

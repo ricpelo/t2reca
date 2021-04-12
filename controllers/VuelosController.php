@@ -6,6 +6,7 @@ use app\models\Reservas;
 use Yii;
 use app\models\Vuelos;
 use app\models\VuelosSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -22,9 +23,20 @@ class VuelosController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['reservar'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['reservar'],
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -53,7 +65,7 @@ class VuelosController extends Controller
         $reservas->usuario_id = Yii::$app->user->id;
 
         if ($reservas->load(Yii::$app->request->post()) && $reservas->save()) {
-
+            return $this->redirect(['vuelos/index']);
         }
 
         return $this->render('reservar', [
