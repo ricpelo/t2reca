@@ -30,11 +30,11 @@ class VuelosController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['reservar'],
+                'only' => ['reservar', 'anular'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['reservar'],
+                        'actions' => ['reservar', 'anular'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -71,6 +71,20 @@ class VuelosController extends Controller
         return $this->render('reservar', [
             'vuelo' => $vuelo,
             'reservas' => $reservas,
+        ]);
+    }
+
+    public function actionAnular($id)
+    {
+        $reserva = $this->findReserva($id);
+
+        if (Yii::$app->request->isPost) {
+            Reservas::findOne($id)->delete();
+            return $this->redirect(['vuelos/index']);
+        }
+
+        return $this->render('anular', [
+            'reserva' => $reserva,
         ]);
     }
 
@@ -149,6 +163,15 @@ class VuelosController extends Controller
     protected function findModel($id)
     {
         if (($model = Vuelos::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function findReserva($id)
+    {
+        if (($model = Reservas::findOne($id)) !== null) {
             return $model;
         }
 

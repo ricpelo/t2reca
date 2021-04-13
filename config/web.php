@@ -57,6 +57,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'vuelos/reservar/<id:\d+>' => 'vuelos/reservar',
+                'vuelos/anular/<id:\d+>' => 'vuelos/anular',
             ],
         ],
     ],
